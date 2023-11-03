@@ -1,25 +1,13 @@
+#include <stdio.h>
+
 #include "glad.h"
 #include <GLFW/glfw3.h>
 
-#include <stdio.h>
+#include "fileio.h"
 
 // Settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-// Shaders
-const char *vertexShaderSource = "#version 460 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-const char *fragmentShaderSource = "#version 460 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
 
 // Process Input
 void processInput(GLFWwindow *window)
@@ -33,6 +21,24 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     //Make sure viewport is resized when the window size is updated.
     glViewport(0, 0, width, height);
+}
+
+// Compile Shader
+unsigned int compileShader(unsigned int shaderType, const char* shaderSource)
+{
+    int success;
+    char infoLog[512];
+
+    unsigned int shader = glCreateShader(shaderType);
+    glShaderSource(shader, 1, &shaderSource, NULL);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+        printf("Shader Failed To Compile: %s\n", infoLog);
+    }
+
+    return shader;
 }
 
 // Main
@@ -63,44 +69,25 @@ int main()
         return 1;
     } 
 
-    // Shader Compilation
-    int success;
-    char infoLog[512];
+    // Read Shaders
+    char *vertexShaderSource = readFile("vertexShader.glsl");
+    char *fragmentShaderSource = readFile("fragmentShader.glsl");
 
-    // Vertex Shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        printf("Vertex Shader Failed To Compile: %s\n", infoLog);
-    }
-
-    // Fragment Shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        printf("Fragment Shader Failed To Compile: %s\n", infoLog);
-    }
+    // Compile Shaders
+    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
+    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
     // Link Shaders
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        printf("Failed to Link Shaders: %s\n", infoLog);
-    }
 
     // Clean Up Shaders
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    freeFile(vertexShaderSource);
+    freeFile(fragmentShaderSource);
 
     // Program Data
     float vertices[] = {
