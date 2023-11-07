@@ -26,7 +26,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 }
 
 // Compile Shader
-unsigned int compileShader(unsigned int shaderType, const char* shaderSource)
+unsigned int compileShader(unsigned int shaderType, const char *shaderSource)
 {
     int success;
     char infoLog[512];
