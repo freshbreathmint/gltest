@@ -1,5 +1,6 @@
-# Ignore executable
-gltest
+# Ignore Build
+bin/
+obj/
 
 # Ignore VSCode
 ./vscode
