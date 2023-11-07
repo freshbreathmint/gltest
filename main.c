@@ -1,11 +1,9 @@
 #include <stdio.h>
 
-#include <math.h>
-
 #include "glad.h"
 #include <GLFW/glfw3.h>
 
-#include "fileio.h"
+#include "shader.h"
 
 // Settings
 const unsigned int SCR_WIDTH = 800;
@@ -23,24 +21,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     //Make sure viewport is resized when the window size is updated.
     glViewport(0, 0, width, height);
-}
-
-// Compile Shader
-unsigned int compileShader(unsigned int shaderType, const char *shaderSource)
-{
-    int success;
-    char infoLog[512];
-
-    unsigned int shader = glCreateShader(shaderType);
-    glShaderSource(shader, 1, &shaderSource, NULL);
-    glCompileShader(shader);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        printf("Shader Failed To Compile: %s\n", infoLog);
-    }
-
-    return shader;
 }
 
 // Main
@@ -71,25 +51,9 @@ int main()
         return 1;
     } 
 
-    // Read Shaders
-    char *vertexShaderSource = readFile("vertexShader.glsl");
-    char *fragmentShaderSource = readFile("fragmentShader.glsl");
-
-    // Compile Shaders
-    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
-    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-
-    // Link Shaders
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    // Clean Up Shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-    freeFile(vertexShaderSource);
-    freeFile(fragmentShaderSource);
+    // Load shaders
+    Shader shader;
+    Shader_init(&shader, "vertexShader.glsl", "fragmentShader.glsl");
 
     // Program Data
     float vertices[] = {
@@ -137,8 +101,8 @@ int main()
         // Clear Buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Activate Shader
-        glUseProgram(shaderProgram);
+        // Use Shader
+        Shader_use(&shader);
 
         // Draw Triangle
         glBindVertexArray(VAO);
