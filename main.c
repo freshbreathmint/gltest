@@ -9,11 +9,22 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-// Process Input
-void processInput(GLFWwindow *window)
+static _Bool wireframeMode = 0; // Initalize in Fill Mode
+
+// Key Callback
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, 1);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, 1);
+
+    if (key == GLFW_KEY_X && action == GLFW_PRESS)
+    {
+        wireframeMode = !wireframeMode;
+        if (wireframeMode)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 }
 
 // Window Size Callback
@@ -43,7 +54,9 @@ int main()
         return 1;
     }
     glfwMakeContextCurrent(window);
+
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, keyCallback);
 
     // Initalize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -95,9 +108,6 @@ int main()
     // Main Loop
     while (!glfwWindowShouldClose(window))
     {
-        // Process Input
-        processInput(window);
-
         // Clear Buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
