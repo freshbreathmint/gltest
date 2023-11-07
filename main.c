@@ -93,14 +93,13 @@ int main()
 
     // Program Data
     float vertices[] = {
-        0.5f,   0.5f,   0.0f,   // Top Right
-        0.5f,   -0.5f,  0.0f,   // Bottom Right
-        -0.5f,  -0.5f,  0.0f,   // Bottom Left
-        -0.5f,  0.5f,   0.0f    // Top Left
+        // positions            // colors
+         0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f,   // bottom left
+         0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f    // top
     };
     unsigned int indices[] = {
-        0, 1, 3,    // First Triangle
-        1, 2, 3
+        0, 1, 2,    // First Triangle
     };
 
     // Configure Array & Buffers
@@ -118,8 +117,10 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // copy indices to buffer
 
     // Link Vertex Attributes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); // Position Attribute
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Set Clear Color
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -138,12 +139,6 @@ int main()
 
         // Activate Shader
         glUseProgram(shaderProgram);
-
-        // Update shader
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
         // Draw Triangle
         glBindVertexArray(VAO);
