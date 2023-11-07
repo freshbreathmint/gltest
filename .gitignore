@@ -1,2 +1,5 @@
 # Ignore executable
 gltest
+
+# Ignore VSCode
+./vscode
