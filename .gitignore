@@ -3,4 +3,4 @@ bin/
 obj/
 
 # Ignore VSCode
-./vscode
+.vscode/
