@@ -66,7 +66,7 @@ int main()
 
     // Load shaders
     Shader shader;
-    Shader_init(&shader, "shader/vertexShader.glsl", "shader/fragmentShader.glsl");
+    Shader_init(&shader, "src/shader/vertexShader.glsl", "src/shader/fragmentShader.glsl");
 
     // Program Data
     float vertices[] = {
