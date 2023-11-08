@@ -1,13 +1,14 @@
-Controls:
+# About:
+This is my private attempt to learn OpenGL.
+
+# Controls:
 X       |   Toggle Wireframe
 ESCAPE  |   Quit
 
-Credits:
-
+# Credits:
 Made by Mints
 
-Using:
-
+# Using:
 OpenGL
 GLFW
 GLAD
