@@ -105,7 +105,7 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Load Texture
-    unsigned int texture = loadTexture("textures/wall.jpg", GL_RGB);
+    unsigned int texture = loadTexture("textures/texture.png", GL_RGBA);
 
     Shader_use(&shader);
     Shader_setInt(&shader, "texture", 0);
