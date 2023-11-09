@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "shader.h"
+#include "texture.h"
 
 // Settings
 const unsigned int SCR_WIDTH = 800;
@@ -70,13 +71,15 @@ int main()
 
     // Program Data
     float vertices[] = {
-        // positions            // colors
-         0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f,   // bottom left
-         0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f    // top
+        // positions          // colors           // texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left
     };
     unsigned int indices[] = {
-        0, 1, 2,    // First Triangle
+        0, 1, 3,    // First Triangle
+        1, 2, 3     // Second Triangle
     };
 
     // Configure Array & Buffers
@@ -94,16 +97,21 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // copy indices to buffer
 
     // Link Vertex Attributes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); // Position Attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);                       // Position Attribute
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));     // Color Attribute
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));     // Texture Coordinate Attribute
+    glEnableVertexAttribArray(2);
 
+    // Load Texture
+    unsigned int texture = loadTexture("textures/wall.jpg", GL_RGB);
+
+    Shader_use(&shader);
+    Shader_setInt(&shader, "texture", 0);
+    
     // Set Clear Color
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-    //Set To Draw Wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Main Loop
     while (!glfwWindowShouldClose(window))
