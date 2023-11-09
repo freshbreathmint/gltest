@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
-LDFLAGS = -lglfw -lGL
+LDFLAGS = -lm -lglfw -lGL
 SOURCES = $(wildcard src/*.c)
 OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 EXECUTABLE = bin/gltest
@@ -9,7 +9,7 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -p obj bin
-	$(CC) $^ -o $@ $(LDFLAGS) -lglfw -lGL
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 obj/%.o: src/%.c
 	@mkdir -p obj
