@@ -105,11 +105,11 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Load Texture
-    unsigned int texture = loadTexture("textures/texture.png", GL_RGBA);
+    unsigned int texture = loadTexture("textures/texture.png", GL_RGB, GL_RGBA);
 
     Shader_use(&shader);
     Shader_setInt(&shader, "texture", 0);
-    
+
     // Set Clear Color
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 

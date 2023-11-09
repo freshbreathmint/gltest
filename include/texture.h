@@ -3,6 +3,6 @@
 
 #include <GLFW/glfw3.h>
 
-unsigned int loadTexture(const char *filename, GLenum format);
+unsigned int loadTexture(const char *filename, GLenum internalFormat, GLenum format);
 
 #endif

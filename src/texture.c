@@ -3,7 +3,7 @@
 
 #include "texture.h"
 
-unsigned int loadTexture(const char *filename, GLenum format)
+unsigned int loadTexture(const char *filename, GLenum internalFormat, GLenum format)
 {
     // Generate Texture
     unsigned int texture;
@@ -19,14 +19,14 @@ unsigned int loadTexture(const char *filename, GLenum format)
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
+
     // Load Image
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(1);
     unsigned char *data = stbi_load(filename, &width, &height, &nrChannels, 0);
 
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else {
