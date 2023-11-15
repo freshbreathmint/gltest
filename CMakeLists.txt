@@ -5,9 +5,12 @@ find_package(OpenGL REQUIRED)
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
+
+add_subdirectory( glfw )
+
 add_executable(${PROJECT_NAME} 
-    src/shader/fragmentShader.glsl
-    src/shader/vertexShader.glsl
     src/fileio.c
     src/glad.c
     src/main.c
@@ -25,4 +28,8 @@ target_link_libraries(${PROJECT_NAME}
         ${OPENGL_LIBRARIES}
         glfw
         m
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
