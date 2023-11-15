@@ -67,7 +67,7 @@ int main()
 
     // Load shaders
     Shader shader;
-    Shader_init(&shader, "shader/vertexShader.glsl", "shader/fragmentShader.glsl");
+    Shader_init(&shader, "resources/shaders/vertexShader.glsl", "resources/shaders/fragmentShader.glsl");
 
     // Program Data
     float vertices[] = {
@@ -105,7 +105,7 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Load Texture
-    unsigned int texture = loadTexture("texture/texture.png", GL_RGB, GL_RGBA);
+    unsigned int texture = loadTexture("resources/textures/texture.png", GL_RGB, GL_RGBA);
 
     Shader_use(&shader);
     Shader_setInt(&shader, "texture", 0);

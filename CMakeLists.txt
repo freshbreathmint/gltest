@@ -30,6 +30,22 @@ target_link_libraries(${PROJECT_NAME}
         m
 )
 
+# Output
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
+)
+
+# Define the source and destination.
+set(RESOURCES_DIR ${CMAKE_SOURCE_DIR}/resources)
+set(RESOURCES_DEST ${CMAKE_SOURCE_DIR}/bin/resources)
+
+# Copy resources
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${RESOURCES_DIR} ${RESOURCES_DEST}
+)
+
+# Define a custom target to trigger the resource copy
+add_custom_target(copy_resources ALL
+    DEPENDS ${RESOURCES_DEST}
 )
