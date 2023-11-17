@@ -1,6 +1,3 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include "texture.h"
 
 unsigned int loadTexture(const char *filename, GLenum internalFormat, GLenum format)
